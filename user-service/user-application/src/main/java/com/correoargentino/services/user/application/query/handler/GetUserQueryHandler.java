@@ -8,6 +8,8 @@ import com.correoargentino.services.user.application.query.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class GetUserQueryHandler implements QueryHandler<GetUserQuery, User> {
@@ -19,3 +21,6 @@ public class GetUserQueryHandler implements QueryHandler<GetUserQuery, User> {
         .orElseThrow(() -> new UserNotFoundException(query.id()));
   }
 }
+
+
+

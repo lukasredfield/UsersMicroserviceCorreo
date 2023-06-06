@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public class UserNotFoundException extends RuntimeException {
   public UserNotFoundException(UUID userId) {
-    super("Could not find a user with id " + userId.toString());
+    super("User not found: " + userId);
   }
 }

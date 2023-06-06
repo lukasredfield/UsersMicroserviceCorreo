@@ -80,7 +80,7 @@ public class UserController {
   )
   @PostMapping
   public ResponseEntity<CreateUserResponse> createUser(
-      @RequestBody CreateUserRequest request) {
+          @RequestBody CreateUserRequest request) {
     log.info("Creating a new user");
     var id = userService.createUser(commandMapper.fromRequest(request));
     return new ResponseEntity<>(new CreateUserResponse(id), HttpStatus.CREATED);
@@ -163,11 +163,12 @@ public class UserController {
                   mediaType = MediaType.APPLICATION_JSON_VALUE))
       }
   )
+
   @PutMapping(value = "{id}")
   public ResponseEntity<Void> updateUser(
       @PathVariable UUID id,
       @RequestBody UpdateUserRequest request) {
-    userService.updateUser(commandMapper.fromRequest(id, request));
+    userService.updateUser(commandMapper.fromUpdateRequest(id, request));
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 

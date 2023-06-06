@@ -6,4 +6,5 @@ import java.util.UUID;
 
 public interface UserReadRepository {
   Optional<User> findById(UUID id);
+
 }

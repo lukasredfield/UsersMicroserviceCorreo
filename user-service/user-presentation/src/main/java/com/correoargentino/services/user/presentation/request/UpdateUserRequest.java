@@ -1,6 +1,10 @@
 package com.correoargentino.services.user.presentation.request;
 
-import java.util.UUID;
 
-public record UpdateUserRequest(UUID id) {
+
+public record UpdateUserRequest(String firstName,
+                                String lastName,
+                                String emailAddress,
+                                String phoneNumber)
+    {
 }

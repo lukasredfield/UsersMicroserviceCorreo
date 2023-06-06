@@ -1,6 +1,13 @@
 package com.correoargentino.services.user.presentation.request;
 
+import java.time.LocalDateTime;
+
 public record CreateUserRequest(
-    String email,
-    String name) {
+        String firstName,
+        String lastName,
+        String emailAddress,
+        String phoneNumber,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt) {
 }
+

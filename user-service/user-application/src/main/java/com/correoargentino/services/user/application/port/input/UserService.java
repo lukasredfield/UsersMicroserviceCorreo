@@ -16,4 +16,6 @@ public interface UserService {
   void deleteUser(@Valid DeleteUserCommand command);
 
   User getUser(@Valid GetUserQuery query);
+
 }
+

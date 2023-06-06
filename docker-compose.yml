@@ -2,19 +2,19 @@ version: '3.1'
 
 services:
 
-#  customer-service:
-#    build:
-#      context: ./user-service
-#      dockerfile: ./Dockerfile
-#    image: user-service
-#    container_name: user-service
-#    restart: always
-#    ports:
-#      - '8081:8081'
-#    depends_on:
-#      - user-service-database
-#    networks:
-#      - service-network
+  #  customer-service:
+  #    build:
+  #      context: ./user-service
+  #      dockerfile: ./Dockerfile
+  #    image: user-service
+  #    container_name: user-service
+  #    restart: always
+  #    ports:
+  #      - '8081:8081'
+  #    depends_on:
+  #      - user-service-database
+  #    networks:
+  #      - service-network
 
   user-service-database:
     image: postgres:15.3-alpine
@@ -23,7 +23,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: admin
       POSTGRES_DB: user-service
     ports:
       - '5432:5432'
@@ -32,9 +32,13 @@ services:
     networks:
       - service-network
 
+
 volumes:
   db:
 
 networks:
   service-network:
     driver: bridge
+
+
+

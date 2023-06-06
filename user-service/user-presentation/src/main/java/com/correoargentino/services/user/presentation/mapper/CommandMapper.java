@@ -13,5 +13,5 @@ public interface CommandMapper {
   CreateUserCommand fromRequest(CreateUserRequest request);
 
   @Mapping(target = "id", source = "id")
-  UpdateUserCommand fromRequest(UUID id, UpdateUserRequest request);
+  UpdateUserCommand fromUpdateRequest(UUID id, UpdateUserRequest request);
  }
