@@ -42,6 +42,7 @@ public class UserRepositoryImp implements UserRepository {
   public void create(User user) {
     UserEntity userEntity = userMapperImp.fromAggregate(user);
     userEntityRepository.save(userEntity);
+    user.setId(userEntity.getId());
   }
 
   /**
