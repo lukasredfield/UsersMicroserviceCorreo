@@ -8,8 +8,6 @@ import java.util.UUID;
 public record CreateUserCommand(String firstName,
                                 String lastName,
                                 String emailAddress,
-                                String phoneNumber,
-                                LocalDateTime createdAt,
-                                LocalDateTime updatedAt) implements Command<UUID> {
+                                String phoneNumber) implements Command<UUID> {
 
 }

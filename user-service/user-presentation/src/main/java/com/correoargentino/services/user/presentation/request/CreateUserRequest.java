@@ -6,8 +6,6 @@ public record CreateUserRequest(
         String firstName,
         String lastName,
         String emailAddress,
-        String phoneNumber,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt) {
+        String phoneNumber) {
 }
 

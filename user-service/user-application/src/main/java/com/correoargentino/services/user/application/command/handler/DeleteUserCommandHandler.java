@@ -19,10 +19,7 @@ public class DeleteUserCommandHandler implements CommandHandler<DeleteUserComman
 
     @Override
     public Void handle(DeleteUserCommand command) {
-        UUID userId = command.id();
-
-        userRepository.delete(userId);
-
+        userRepository.delete(command.id());
         return null;
     }
 }

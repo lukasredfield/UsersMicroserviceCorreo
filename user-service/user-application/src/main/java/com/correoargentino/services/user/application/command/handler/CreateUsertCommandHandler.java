@@ -4,6 +4,7 @@ import com.correoargentino.services.user.application.command.CreateUserCommand;
 import com.correoargentino.services.user.application.messaging.CommandHandler;
 import com.correoargentino.services.user.application.port.output.UserRepository;
 import com.correoargentino.services.user.domain.model.User;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,15 +17,18 @@ public class CreateUsertCommandHandler implements CommandHandler<CreateUserComma
 
     @Override
     public UUID handle(CreateUserCommand command) {
+        // keyclock -> id
+
         var user = new User(
+                // id,
                 command.firstName(),
                 command.lastName(),
                 command.emailAddress(),
                 command.phoneNumber(),
-                command.createdAt(),
-                command.updatedAt()
+                LocalDateTime.now(),
+                LocalDateTime.now()
         );
-        userRepository.create(user);
+        userRepository.save(user);
         return user.getId();
     }
 }

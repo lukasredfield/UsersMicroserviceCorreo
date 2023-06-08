@@ -5,11 +5,9 @@ import com.correoargentino.services.user.application.exception.UserNotFoundExcep
 import com.correoargentino.services.user.application.messaging.CommandHandler;
 import com.correoargentino.services.user.application.port.output.UserRepository;
 import com.correoargentino.services.user.domain.model.User;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
-
 
 @Service
 @Qualifier("updateUserCommandHandler")
@@ -22,17 +20,18 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
 
     @Override
     public Void handle(UpdateUserCommand command) {
-        UUID userId = command.id();
+        var userId = command.id();
 
-        User user = userRepository.find(userId)
+        User user = userRepository.find(command.id())
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
         user.setFirstName(command.firstName());
         user.setLastName(command.lastName());
         user.setEmailAddress(command.emailAddress());
         user.setPhoneNumber(command.phoneNumber());
+        user.setUpdatedAt(LocalDateTime.now());
 
-        userRepository.updateUser(command);
+        userRepository.save(user);
 
         return null;
     }
