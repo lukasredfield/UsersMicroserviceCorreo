@@ -2,6 +2,7 @@ package com.correoargentino.services.user.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,7 +13,8 @@ import java.util.UUID;
 @Table(name = "users")
 public class UserEntity {
   @Id
-  private UUID id;
+  @Value("${keycloak.client-id}")
+  private UUID clientId;
 
   @Column(name = "first_name")
   private String firstName;

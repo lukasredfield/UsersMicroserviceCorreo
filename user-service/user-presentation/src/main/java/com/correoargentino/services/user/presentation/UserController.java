@@ -1,5 +1,12 @@
 package com.correoargentino.services.user.presentation;
 
+import com.auth0.jwk.Jwk;
+import com.auth0.jwk.JwkProvider;
+import com.auth0.jwk.JwkProviderBuilder;
+import com.auth0.jwk.UrlJwkProvider;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.correoargentino.services.user.application.command.DeleteUserCommand;
 import com.correoargentino.services.user.application.port.input.UserService;
 import com.correoargentino.services.user.application.query.GetUserQuery;
@@ -15,20 +22,21 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+
+import java.security.interfaces.RSAPublicKey;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * The mechanism that dispatches Command objects to their appropriate CommandHandler.
@@ -211,4 +219,6 @@ public class UserController {
     userService.deleteUser(new DeleteUserCommand(id));
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
+
+
 }

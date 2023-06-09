@@ -20,16 +20,10 @@ public class UserRepositoryImp implements UserRepository {
     return userEntityRepository.findById(id).map(userMapperImp::toAggregate);
   }
 
-
   public void save(User user) {
     userEntityRepository.save(userMapperImp.fromAggregate(user));
   }
 
-  /**
-   * Creates a new user.
-   *
-   * @param id The user object to be created.
-   */
   @Override
   public void delete(UUID id) {
     userEntityRepository.deleteById(id);
