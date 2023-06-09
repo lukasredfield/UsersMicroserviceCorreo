@@ -1,18 +1,18 @@
 package com.correoargentino.services.user.presentation;
 
 import com.correoargentino.services.user.presentation.configuration.KeycloakService;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 @Controller
+@RequiredArgsConstructor
 public class LoginController {
+    private final KeycloakService keycloakService;
 
-    @Autowired
-    private KeycloakService keycloakService;
 
     @PostMapping("/login")
     public ResponseEntity<Object> submitLoginForm(@RequestBody LoginForm loginForm) {

@@ -220,5 +220,9 @@ public class UserController {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
-
+  @PostMapping(value = "/logout")
+  public ResponseEntity<Void> logoutUser(@RequestHeader("Authorization") String token) {
+    userService.logoutUser(token);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
 }

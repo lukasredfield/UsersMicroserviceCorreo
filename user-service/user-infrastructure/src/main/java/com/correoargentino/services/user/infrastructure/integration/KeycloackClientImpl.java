@@ -1,14 +1,18 @@
 package com.correoargentino.services.user.infrastructure.integration;
 
 import com.correoargentino.services.user.application.port.output.KeycloackClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-
+@Service
+@RequiredArgsConstructor
 public class KeycloackClientImpl implements KeycloackClient {
+    private final RestTemplate restTemplate;
 
     @Value("${keycloak.logout}")
     private String keycloakLogout;
@@ -21,8 +25,6 @@ public class KeycloackClientImpl implements KeycloackClient {
 
     @Value("${keycloak.client-secret}")
     private String clientSecret;
-
-    private RestTemplate restTemplate = new RestTemplate();
 
     public void logout(String refreshToken) {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -41,6 +43,4 @@ public class KeycloackClientImpl implements KeycloackClient {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, headers);
         return restTemplate.postForObject(keycloakUserInfo, request, String.class);
     }
-
-
 }

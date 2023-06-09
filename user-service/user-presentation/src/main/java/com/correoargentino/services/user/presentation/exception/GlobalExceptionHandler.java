@@ -1,5 +1,6 @@
 package com.correoargentino.services.user.presentation.exception;
 
+import com.correoargentino.services.user.application.exception.AccessTokenExpiredException;
 import com.correoargentino.services.user.application.exception.UserNotFoundException;
 import com.correoargentino.services.user.presentation.response.ErrorResponse;
 import java.time.LocalDateTime;
@@ -23,6 +24,16 @@ public class GlobalExceptionHandler {
         new ErrorResponse("USER_NOT_FOUND",
             exception.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
   }
+
+  @ExceptionHandler(AccessTokenExpiredException.class)
+  public ResponseEntity<ErrorResponse> handleException(AccessTokenExpiredException exception) {
+    log.error(exception.getMessage(), exception);
+
+    return new ResponseEntity<>(
+        new ErrorResponse("ACCESS_TOKEN_EXPIRED",
+            exception.getMessage(), LocalDateTime.now()), HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<ErrorResponse> handleException(RuntimeException exception) {
     log.error(exception.getMessage(), exception);
