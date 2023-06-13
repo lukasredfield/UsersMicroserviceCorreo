@@ -5,7 +5,6 @@ import com.correoargentino.services.user.application.command.DeleteUserCommand;
 import com.correoargentino.services.user.application.command.UpdateUserCommand;
 import com.correoargentino.services.user.application.port.input.UserService;
 import com.correoargentino.services.user.application.messaging.MessageBus;
-import com.correoargentino.services.user.application.port.output.KeycloackClient;
 import com.correoargentino.services.user.application.query.GetUserQuery;
 import com.correoargentino.services.user.application.query.model.User;
 import java.util.UUID;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
   private final MessageBus messageBus;
-  private final KeycloackClient keycloackClient;
+//  private final KeycloackClient keycloackClient;
 
   @Override
   public UUID createUser(CreateUserCommand command) {
@@ -34,10 +33,10 @@ public class UserServiceImpl implements UserService {
     messageBus.dispatch(command);
   }
 
-  @Override
-  public void logoutUser(String token) {
-    keycloackClient.logout(token);
-  }
+//  @Override
+//  public void logoutUser(String token) {
+//    keycloackClient.logout(token);
+//  }
 
   @Override
   public User getUser(GetUserQuery query) {

@@ -2,7 +2,6 @@ package com.correoargentino.services.user.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,9 +11,14 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 public class UserEntity {
+
   @Id
-  @Value("${keycloak.client-id}")
-  private UUID clientId;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "user_id")
+  private UUID id;
+
+  @Column(name = "user_name")
+  private String userName;
 
   @Column(name = "first_name")
   private String firstName;
@@ -25,8 +29,8 @@ public class UserEntity {
   @Column(name = "email_address")
   private String emailAddress;
 
-  @Column(name = "phone_number", nullable = true)
-  private String phoneNumber;
+  @Column(name = "password")
+  private String password;
 
   @Column(name = "created_at")
   private LocalDateTime createdAt;

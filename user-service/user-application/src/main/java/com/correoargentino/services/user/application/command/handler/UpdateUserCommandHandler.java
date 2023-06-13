@@ -28,7 +28,7 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
         user.setFirstName(command.firstName());
         user.setLastName(command.lastName());
         user.setEmailAddress(command.emailAddress());
-        user.setPhoneNumber(command.phoneNumber());
+        user.setPassword(command.password());
         user.setUpdatedAt(LocalDateTime.now());
 
         userRepository.save(user);

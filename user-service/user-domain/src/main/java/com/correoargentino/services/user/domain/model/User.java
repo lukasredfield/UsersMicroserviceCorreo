@@ -10,10 +10,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class User extends AggregateRoot<UUID> {
+
+  private String userName;
   private String firstName;
   private String lastName;
   private String emailAddress;
-  private String phoneNumber;
+  private String password;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 

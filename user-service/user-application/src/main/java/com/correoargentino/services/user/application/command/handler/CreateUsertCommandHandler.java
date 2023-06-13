@@ -17,14 +17,14 @@ public class CreateUsertCommandHandler implements CommandHandler<CreateUserComma
 
     @Override
     public UUID handle(CreateUserCommand command) {
-        // keyclock -> id
 
         var user = new User(
                 // id,
+                command.userName(),
                 command.firstName(),
                 command.lastName(),
                 command.emailAddress(),
-                command.phoneNumber(),
+                command.password(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

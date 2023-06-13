@@ -5,9 +5,11 @@ import com.correoargentino.services.user.application.messaging.Command;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record CreateUserCommand(String firstName,
+public record CreateUserCommand(String userName,
+                                String firstName,
                                 String lastName,
                                 String emailAddress,
-                                String phoneNumber) implements Command<UUID> {
+                                String password
+                                ) implements Command<UUID> {
 
 }

@@ -15,7 +15,7 @@ public interface UserService {
 
   void deleteUser(@Valid DeleteUserCommand command);
 
-  void logoutUser(String token);
+//  void logoutUser(String token);
 
   User getUser(@Valid GetUserQuery query);
 }

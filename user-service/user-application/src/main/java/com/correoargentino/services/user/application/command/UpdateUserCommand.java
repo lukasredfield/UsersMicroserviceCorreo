@@ -8,5 +8,5 @@ public record UpdateUserCommand(UUID id,
                                 String firstName,
                                 String lastName,
                                 String emailAddress,
-                                String phoneNumber) implements Command<Void> {
+                                String password) implements Command<Void> {
 }
