@@ -31,17 +31,16 @@ public class UserMapperImp implements UserMapper {
     }
 
     public UserEntity fromAggregateKeycloak(UserEntity userEntity, UserKeycloak userKeycloak) {
-
         userEntity.setUserName(userKeycloak.getUserName());
         userEntity.setFirstName(userKeycloak.getFirstName());
         userEntity.setLastName(userKeycloak.getLastName());
         userEntity.setEmailAddress(userKeycloak.getEmailAddress());
 
-
         if (userKeycloak.getId() != null) {
-            userEntity.setId(UUID.fromString(userKeycloak.getId()));
-        }
 
+            UUID id = UUID.randomUUID();
+            userEntity.setId(id);
+        }
 
         keycloakClientImp.createKeycloakUser(userKeycloak);
 
@@ -49,12 +48,13 @@ public class UserMapperImp implements UserMapper {
     }
 
 
+
     @Override
     public User toAggregate(UserEntity userEntity) {
         return new User(
                 userEntity.getUserName(),
                 userEntity.getFirstName(),
-                userEntity.getFirstName(),
+                userEntity.getLastName(),
                 userEntity.getEmailAddress(),
                 userEntity.getPassword(),
                 userEntity.getCreatedAt(),
