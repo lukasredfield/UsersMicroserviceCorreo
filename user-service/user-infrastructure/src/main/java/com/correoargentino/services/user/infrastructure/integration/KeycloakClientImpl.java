@@ -29,7 +29,8 @@ public class KeycloakClientImpl implements KeycloakClient {
                 .build();
     }
 
-    public void createKeycloakUser(UserKeycloak userKeycloak) {    // DEBERÍA USARSE AQUÍ EL ("fromAggregateKeycloak")
+    public void createKeycloakUser(UserKeycloak userKeycloak) {
+
         try {
             UserRepresentation userRepresentation = new UserRepresentation();
             userRepresentation.setUsername(userKeycloak.getUserName());
@@ -41,16 +42,13 @@ public class KeycloakClientImpl implements KeycloakClient {
             UsersResource usersResource = realmResource.users();
             Response response = usersResource.create(userRepresentation);
 
-            // Verifica el código de respuesta para determinar si la creación fue exitosa
+
             if (response.getStatus() == HttpStatus.CREATED.value()) {
-                // El usuario se creó correctamente
-                // Puedes realizar cualquier otra acción necesaria aquí
+
             } else {
-                // La creación del usuario falló
-                // Maneja el error de acuerdo a tus necesidades
             }
         } catch (Exception e) {
-            // Maneja las excepciones que puedan ocurrir durante la creación del usuario
+
         }
     }
 

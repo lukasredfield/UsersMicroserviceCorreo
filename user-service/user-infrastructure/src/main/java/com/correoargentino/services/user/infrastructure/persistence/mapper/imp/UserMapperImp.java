@@ -31,18 +31,18 @@ public class UserMapperImp implements UserMapper {
     }
 
     public UserEntity fromAggregateKeycloak(UserEntity userEntity, UserKeycloak userKeycloak) {
-        // Crea el usuario en Keycloak utilizando el cliente de administración de Keycloak
+
         userEntity.setUserName(userKeycloak.getUserName());
         userEntity.setFirstName(userKeycloak.getFirstName());
         userEntity.setLastName(userKeycloak.getLastName());
         userEntity.setEmailAddress(userKeycloak.getEmailAddress());
 
-        // Establece otras propiedades necesarias para UserEntity
+
         if (userKeycloak.getId() != null) {
             userEntity.setId(UUID.fromString(userKeycloak.getId()));
         }
 
-        // Crea el usuario en Keycloak utilizando el cliente
+
         keycloakClientImp.createKeycloakUser(userKeycloak);
 
         return userEntity;

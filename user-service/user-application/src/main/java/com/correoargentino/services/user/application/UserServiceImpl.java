@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
   private final MessageBus messageBus;
- // private final KeycloackClient keycloackClient;
 
   @Override
   public UUID createUser(CreateUserCommand command) {
