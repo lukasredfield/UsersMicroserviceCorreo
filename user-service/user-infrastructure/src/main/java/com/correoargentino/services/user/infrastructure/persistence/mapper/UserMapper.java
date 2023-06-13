@@ -1,8 +1,8 @@
 package com.correoargentino.services.user.infrastructure.persistence.mapper;
 
 import com.correoargentino.services.user.domain.model.User;
+import com.correoargentino.services.user.domain.model.UserKeycloak;
 import com.correoargentino.services.user.infrastructure.persistence.entity.UserEntity;
-import com.correoargentino.services.user.infrastructure.persistence.entity.UserKeycloak;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 

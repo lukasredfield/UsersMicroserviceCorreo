@@ -1,8 +1,7 @@
 package com.correoargentino.services.user.infrastructure.integration;
 
 import com.correoargentino.services.user.infrastructure.persistence.entity.UserEntity;
-import com.correoargentino.services.user.infrastructure.persistence.entity.UserKeycloak;
-import lombok.RequiredArgsConstructor;
+import com.correoargentino.services.user.domain.model.UserKeycloak;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -30,7 +29,7 @@ public class KeycloakClientImpl implements KeycloakClient {
                 .build();
     }
 
-    public void createKeycloakUser(UserKeycloak userKeycloak) {
+    public void createKeycloakUser(UserKeycloak userKeycloak) {    // DEBERÍA USARSE AQUÍ EL ("fromAggregateKeycloak")
         try {
             UserRepresentation userRepresentation = new UserRepresentation();
             userRepresentation.setUsername(userKeycloak.getUserName());

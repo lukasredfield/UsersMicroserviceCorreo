@@ -1,4 +1,4 @@
-package com.correoargentino.services.user.infrastructure.persistence.entity;
+package com.correoargentino.services.user.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,5 +14,6 @@ public class UserKeycloak {
     private String firstName;
     private String lastName;
     private String emailAddress;
+
 
 }
