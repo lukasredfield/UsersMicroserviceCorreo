@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.core.Response;
 
 @Service
-@RequiredArgsConstructor
 public class KeycloakClientImpl implements KeycloakClient {
     private final Keycloak keycloakClient;
 
@@ -31,16 +30,13 @@ public class KeycloakClientImpl implements KeycloakClient {
                 .build();
     }
 
-
     public void createKeycloakUser(UserKeycloak userKeycloak) {
         try {
-
             UserRepresentation userRepresentation = new UserRepresentation();
             userRepresentation.setUsername(userKeycloak.getUserName());
             userRepresentation.setFirstName(userKeycloak.getFirstName());
             userRepresentation.setLastName(userKeycloak.getLastName());
             userRepresentation.setEmail(userKeycloak.getEmailAddress());
-
 
             RealmResource realmResource = keycloakClient.realm("customers");
             UsersResource usersResource = realmResource.users();
@@ -69,6 +65,7 @@ public class KeycloakClientImpl implements KeycloakClient {
         return userKeycloak;
     }
 }
+
 
 //    private final RestTemplate restTemplate;
 //

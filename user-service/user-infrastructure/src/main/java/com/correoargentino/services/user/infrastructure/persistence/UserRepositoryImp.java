@@ -18,8 +18,6 @@ public class UserRepositoryImp implements UserRepository {
   private final UserEntityRepository userEntityRepository;
   private final UserMapperImp userMapperImp;
 
-  private final KeycloakClientImpl keycloakClientImpl;
-
 
 
   @Override
@@ -30,12 +28,12 @@ public class UserRepositoryImp implements UserRepository {
   public void save(User user) {
     UserEntity userEntity = userMapperImp.fromAggregate(user);
     userEntityRepository.save(userEntity);
-
-    UserKeycloak userKeycloak = keycloakClientImpl.getUserKeycloak(userEntity);
-    userMapperImp.fromAggregateKeycloak(userEntity, userKeycloak);
   }
 
-
+//  public void safe(User user) {   *MÉTODO PARA QUE TRASNFORME UN "UserEntity" en un "UserKeycloak"
+//    UserEntity userEntity = userMapperImp.fromAggregate(user);
+//    userEntityRepository.save(userEntity);
+//  }
 
   @Override
   public void delete(UUID id) {

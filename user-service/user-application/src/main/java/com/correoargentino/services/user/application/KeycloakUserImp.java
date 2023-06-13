@@ -1,6 +1,7 @@
-package com.correoargentino.services.user.infrastructure.integration;
+package com.correoargentino.services.user.application;
 
 import com.correoargentino.services.user.application.exception.UserNotFoundException;
+import com.correoargentino.services.user.application.port.output.KeycloakUser;
 import com.correoargentino.services.user.application.port.output.UserRepository;
 import com.correoargentino.services.user.domain.model.User;
 import org.keycloak.admin.client.Keycloak;
@@ -11,13 +12,13 @@ import javax.ws.rs.core.Response;
 import java.util.Optional;
 import java.util.UUID;
 
-public class KeycloakUserRepository implements UserRepository {
+public class KeycloakUserImp implements KeycloakUser {
 
     private final Keycloak keycloak;
     private final UserRepository userRepository;
     private final String realm;
 
-    public KeycloakUserRepository(String keycloakUrl, String realm, String clientId, String clientSecret, UserRepository userRepository) {
+    public KeycloakUserImp(String keycloakUrl, String realm, String clientId, String clientSecret, UserRepository userRepository) {
         this.keycloak = KeycloakBuilder.builder()
                 .serverUrl(keycloakUrl)
                 .realm(realm)
@@ -34,7 +35,7 @@ public class KeycloakUserRepository implements UserRepository {
     }
 
     @Override
-    public void save(User user) {
+    public void saveKeycloakUser(User user) {
         userRepository.save(user);
 
         UserRepresentation userRepresentation = new UserRepresentation();
@@ -53,7 +54,6 @@ public class KeycloakUserRepository implements UserRepository {
             throw new RuntimeException(errorMessage);
         }
     }
-
 
     @Override
     public void delete(UUID id) {
