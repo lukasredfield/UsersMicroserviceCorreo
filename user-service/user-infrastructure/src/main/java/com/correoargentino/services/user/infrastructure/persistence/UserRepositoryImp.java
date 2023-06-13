@@ -2,6 +2,7 @@ package com.correoargentino.services.user.infrastructure.persistence;
 
 import com.correoargentino.services.user.application.port.output.UserRepository;
 import com.correoargentino.services.user.domain.model.User;
+import com.correoargentino.services.user.infrastructure.integration.KeycloakClientImpl;
 import com.correoargentino.services.user.infrastructure.persistence.entity.UserEntity;
 import com.correoargentino.services.user.domain.model.UserKeycloak;
 import com.correoargentino.services.user.infrastructure.persistence.mapper.imp.UserMapperImp;
@@ -9,16 +10,24 @@ import com.correoargentino.services.user.infrastructure.persistence.repository.U
 import java.util.Optional;
 import java.util.UUID;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class UserRepositoryImp implements UserRepository {
-  private final UserEntityRepository userEntityRepository;
-  private final UserMapperImp userMapperImp;
+  @Autowired
+  private UserEntityRepository userEntityRepository;
 
+  @Autowired
+  private UserMapperImp userMapperImp;
+
+  @Autowired
+  private final KeycloakClientImpl keycloakClientImp;
+
+  @Autowired
+  public UserRepositoryImp(KeycloakClientImpl keycloakClientImp) {
+    this.keycloakClientImp = keycloakClientImp;
+  }
 
   @Override
   public Optional<User> find(UUID id) {
@@ -34,8 +43,6 @@ public class UserRepositoryImp implements UserRepository {
     UserEntity userEntity = userMapperImp.fromAggregateKeycloak(new UserEntity(), userKeycloak);
     userEntityRepository.save(userEntity);
   }
-
-
 
   @Override
   public void delete(UUID id) {

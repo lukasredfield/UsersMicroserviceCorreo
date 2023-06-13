@@ -5,16 +5,16 @@ import com.correoargentino.services.user.infrastructure.integration.KeycloakClie
 import com.correoargentino.services.user.infrastructure.persistence.entity.UserEntity;
 import com.correoargentino.services.user.domain.model.UserKeycloak;
 import com.correoargentino.services.user.infrastructure.persistence.mapper.UserMapper;
-import lombok.NoArgsConstructor;
 
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
-
 @NoArgsConstructor
-public class UserMapperImp extends KeycloakClientImpl implements UserMapper {
-
-    private KeycloakClientImpl keycloakClient;
+public class UserMapperImp implements UserMapper {
+    @Autowired
+    private KeycloakClientImpl keycloakClientImp;
 
     @Override
     public UserEntity fromAggregate(User user) {
@@ -30,8 +30,6 @@ public class UserMapperImp extends KeycloakClientImpl implements UserMapper {
         return userEntity;
     }
 
-
-
     public UserEntity fromAggregateKeycloak(UserEntity userEntity, UserKeycloak userKeycloak) {
         // Crea el usuario en Keycloak utilizando el cliente de administración de Keycloak
         userEntity.setUserName(userKeycloak.getUserName());
@@ -40,10 +38,12 @@ public class UserMapperImp extends KeycloakClientImpl implements UserMapper {
         userEntity.setEmailAddress(userKeycloak.getEmailAddress());
 
         // Establece otras propiedades necesarias para UserEntity
-        userEntity.setId(UUID.fromString(userKeycloak.getId()));
+        if (userKeycloak.getId() != null) {
+            userEntity.setId(UUID.fromString(userKeycloak.getId()));
+        }
 
         // Crea el usuario en Keycloak utilizando el cliente
-        keycloakClient.createKeycloakUser(userKeycloak);
+        keycloakClientImp.createKeycloakUser(userKeycloak);
 
         return userEntity;
     }
