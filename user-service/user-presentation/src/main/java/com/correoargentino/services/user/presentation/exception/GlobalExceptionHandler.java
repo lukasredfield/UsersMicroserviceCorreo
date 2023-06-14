@@ -3,6 +3,7 @@ package com.correoargentino.services.user.presentation.exception;
 import com.correoargentino.services.user.application.exception.AccessTokenExpiredException;
 import com.correoargentino.services.user.application.exception.UserNotFoundException;
 import com.correoargentino.services.user.presentation.response.ErrorResponse;
+import java.net.URI;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Slf4j
 @ControllerAdvice
@@ -21,8 +23,10 @@ public class GlobalExceptionHandler {
     log.error(exception.getMessage(), exception);
 
     return new ResponseEntity<>(
-        new ErrorResponse("USER_NOT_FOUND",
-            exception.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
+        new ErrorResponse("User Not Found", exception.getMessage(),
+            HttpStatus.NOT_FOUND.value(), LocalDateTime.now(),
+            URI.create(ServletUriComponentsBuilder.
+                fromCurrentRequestUri().toUriString())), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(AccessTokenExpiredException.class)
@@ -30,8 +34,10 @@ public class GlobalExceptionHandler {
     log.error(exception.getMessage(), exception);
 
     return new ResponseEntity<>(
-        new ErrorResponse("ACCESS_TOKEN_EXPIRED",
-            exception.getMessage(), LocalDateTime.now()), HttpStatus.BAD_REQUEST);
+        new ErrorResponse("Access Token Expired", exception.getMessage(),
+            HttpStatus.BAD_REQUEST.value(), LocalDateTime.now(),
+            URI.create(ServletUriComponentsBuilder.
+                fromCurrentRequestUri().toUriString())), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(RuntimeException.class)
@@ -39,7 +45,9 @@ public class GlobalExceptionHandler {
     log.error(exception.getMessage(), exception);
 
     return new ResponseEntity<>(
-        new ErrorResponse("INTERNAL_SERVER_ERROR",
-            exception.getMessage(), LocalDateTime.now()), HttpStatus.INTERNAL_SERVER_ERROR);
+        new ErrorResponse("internal Server Error", exception.getMessage(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(), LocalDateTime.now(),
+            URI.create(ServletUriComponentsBuilder.
+                fromCurrentRequestUri().toUriString())), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
