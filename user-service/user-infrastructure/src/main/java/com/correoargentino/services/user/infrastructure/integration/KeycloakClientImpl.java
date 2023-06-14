@@ -12,40 +12,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
-
-@Slf4j
 @Service
 public class KeycloakClientImpl implements KeycloakClient {
     private final Keycloak keycloakClient;
-    private final String realm;
-    private final String clientId;
-    private final String clientSecret;
-    private final String serverUrl;
 
-    public KeycloakClientImpl(
-            @Value("${keycloak.realm}") String realm,
-            @Value("${keycloak.client-id}") String clientId,
-            @Value("${keycloak.client-secret}") String clientSecret,
-            @Value("${keycloak.server-url}") String serverUrl
-    ) {
-        this.realm = realm;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.serverUrl = serverUrl;
-
+    public KeycloakClientImpl() {
         this.keycloakClient = KeycloakBuilder.builder()
-                .serverUrl(serverUrl)
-                .realm(realm)
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .serverUrl("http://localhost:9090/auth")
+                .realm("customers")
+                .clientId("user-service")
+                .clientSecret("6E0OMa797-tJPqvE2bny9QoIEqcb_KWLFEgtIvP6U6A")
+                .grantType(OAuth2Constants.PASSWORD)
+                .username("admin")
+                .password("admin")
                 .build();
     }
 
     public void createKeycloakUser(UserKeycloak userKeycloak) {
+
         try {
             UserRepresentation userRepresentation = new UserRepresentation();
             userRepresentation.setUsername(userKeycloak.getUserName());
@@ -53,18 +38,17 @@ public class KeycloakClientImpl implements KeycloakClient {
             userRepresentation.setLastName(userKeycloak.getLastName());
             userRepresentation.setEmail(userKeycloak.getEmailAddress());
 
-            RealmResource realmResource = keycloakClient.realm(realm);
+            RealmResource realmResource = keycloakClient.realm("customers");
             UsersResource usersResource = realmResource.users();
+            Response response = usersResource.create(userRepresentation);
 
-            try (Response response = usersResource.create(userRepresentation)) {
-                if (response.getStatus() == HttpStatus.CREATED.value()) {
-                    log.info("Usuario creado en Keycloak: {}", userKeycloak.getUserName());
-                } else {
-                    log.error("Error al crear el usuario en Keycloak: {}", response.getStatusInfo().getReasonPhrase());
-                }
+
+            if (response.getStatus() == HttpStatus.CREATED.value()) {
+
+            } else {
             }
         } catch (Exception e) {
-            log.error("Excepción al crear el usuario en Keycloak", e);
+
         }
     }
 
@@ -78,7 +62,6 @@ public class KeycloakClientImpl implements KeycloakClient {
         return userKeycloak;
     }
 }
-
 
 
 //    private final RestTemplate restTemplate;

@@ -31,13 +31,7 @@ public class CreateUsertCommandHandler implements CommandHandler<CreateUserComma
                 LocalDateTime.now()
         );
 
-        var userKeycloak = new UserKeycloak(command.userName(),
-                command.firstName(),
-                command.lastName(),
-                command.emailAddress(),
-                command.password(),
-                LocalDateTime.now(),
-                LocalDateTime.now());
+        var userKeycloak = new UserKeycloak();
 
         userRepository.save(user);
         userRepository.safe(userKeycloak);
