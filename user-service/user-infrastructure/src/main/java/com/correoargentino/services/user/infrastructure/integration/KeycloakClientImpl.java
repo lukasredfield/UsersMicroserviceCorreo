@@ -41,9 +41,7 @@ public class KeycloakClientImpl implements KeycloakClient {
                 .realm(realm)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
-                .grantType(OAuth2Constants.PASSWORD)
-                .username("lucas")
-                .password("admin")
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                 .build();
     }
 
@@ -58,15 +56,13 @@ public class KeycloakClientImpl implements KeycloakClient {
             RealmResource realmResource = keycloakClient.realm(realm);
             UsersResource usersResource = realmResource.users();
 
-            Response response = usersResource.create(userRepresentation);
-
-            if (response.getStatus() == HttpStatus.CREATED.value()) {
-                log.info("Usuario creado en Keycloak: {}", userKeycloak.getUserName());
-            } else {
-                log.error("Error al crear el usuario en Keycloak: {}", response.getStatusInfo().getReasonPhrase());
+            try (Response response = usersResource.create(userRepresentation)) {
+                if (response.getStatus() == HttpStatus.CREATED.value()) {
+                    log.info("Usuario creado en Keycloak: {}", userKeycloak.getUserName());
+                } else {
+                    log.error("Error al crear el usuario en Keycloak: {}", response.getStatusInfo().getReasonPhrase());
+                }
             }
-
-            response.close();
         } catch (Exception e) {
             log.error("Excepción al crear el usuario en Keycloak", e);
         }
@@ -82,7 +78,6 @@ public class KeycloakClientImpl implements KeycloakClient {
         return userKeycloak;
     }
 }
-
 
 
 
