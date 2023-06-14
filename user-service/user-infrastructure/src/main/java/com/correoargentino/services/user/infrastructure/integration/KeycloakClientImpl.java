@@ -1,98 +1,47 @@
 package com.correoargentino.services.user.infrastructure.integration;
 
-import com.correoargentino.services.user.infrastructure.persistence.entity.UserEntity;
-import com.correoargentino.services.user.domain.model.UserKeycloak;
-import org.keycloak.OAuth2Constants;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.admin.client.resource.RealmResource;
+import com.correoargentino.services.user.application.port.output.KeycloakClient;
+import java.util.List;
+import java.util.UUID;
+import javax.ws.rs.core.Response;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.core.Response;
-
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class KeycloakClientImpl implements KeycloakClient {
-    private final Keycloak keycloakClient;
+  private final UsersResource usersResource;
 
-    public KeycloakClientImpl() {
-        this.keycloakClient = KeycloakBuilder.builder()
-                .serverUrl("http://localhost:9090/auth")
-                .realm("customers")
-                .clientId("user-service")
-                .clientSecret("6E0OMa797-tJPqvE2bny9QoIEqcb_KWLFEgtIvP6U6A")
-                .grantType(OAuth2Constants.PASSWORD)
-                .username("admin")
-                .password("admin")
-                .build();
+  public UUID register(String firstName, String lastName,
+                       String emailAddress, String password) {
+
+    var credential = new CredentialRepresentation();
+    credential.setTemporary(false);
+    credential.setType(CredentialRepresentation.PASSWORD);
+    credential.setValue(password);
+
+    var user = new UserRepresentation();
+    user.setUsername(emailAddress);
+    user.setFirstName(firstName);
+    user.setLastName(lastName);
+    user.setEmail(emailAddress);
+    user.setCredentials(List.of(credential));
+    user.setEnabled(true);
+
+    try (var response = usersResource.create(user)) {
+      if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
+        return UUID.fromString(CreatedResponseUtil.getCreatedId(response));
+      }
+    } catch (Exception e) {
+      log.error(e.getMessage());
     }
 
-    public void createKeycloakUser(UserKeycloak userKeycloak) {
-
-        try {
-            UserRepresentation userRepresentation = new UserRepresentation();
-            userRepresentation.setUsername(userKeycloak.getUserName());
-            userRepresentation.setFirstName(userKeycloak.getFirstName());
-            userRepresentation.setLastName(userKeycloak.getLastName());
-            userRepresentation.setEmail(userKeycloak.getEmailAddress());
-
-            RealmResource realmResource = keycloakClient.realm("customers");
-            UsersResource usersResource = realmResource.users();
-            Response response = usersResource.create(userRepresentation);
-
-
-            if (response.getStatus() == HttpStatus.CREATED.value()) {
-
-            } else {
-            }
-        } catch (Exception e) {
-
-        }
-    }
-
-    public UserKeycloak getUserKeycloak(UserEntity userEntity) {
-        UserKeycloak userKeycloak = new UserKeycloak();
-        userKeycloak.setId(userEntity.getId().toString());
-        userKeycloak.setUserName(userEntity.getUserName());
-        userKeycloak.setFirstName(userEntity.getFirstName());
-        userKeycloak.setLastName(userEntity.getLastName());
-        userKeycloak.setEmailAddress(userEntity.getEmailAddress());
-        return userKeycloak;
-    }
+    return null;
+  }
 }
-
-
-//    private final RestTemplate restTemplate;
-//
-//    @Value("${keycloak.logout}")
-//    private String keycloakLogout;
-//
-//    @Value("${keycloak.user-info-uri}")
-//    private String keycloakUserInfo;
-//
-//    @Value("${keycloak.client-id}")
-//    private String clientId;
-//
-//    @Value("${keycloak.client-secret}")
-//    private String clientSecret;
-//
-//    public void logout(String refreshToken) {
-//        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-//        map.add("client_id",clientId);
-//        map.add("client_secret",clientSecret);
-//        map.add("refresh_token",refreshToken);
-//
-//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, null);
-//        restTemplate.postForObject(keycloakLogout, request, String.class);
-//    }
-//
-//    public String getUserInfo(String token) {
-//        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-//        headers.add("Authorization", token);
-//
-//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, headers);
-//        return restTemplate.postForObject(keycloakUserInfo, request, String.class);
-//    }
-

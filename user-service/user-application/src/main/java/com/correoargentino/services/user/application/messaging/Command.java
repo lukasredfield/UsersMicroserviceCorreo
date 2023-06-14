@@ -1,4 +1,4 @@
 package com.correoargentino.services.user.application.messaging;
 
-public non-sealed interface Command<R> extends Message<R> {
+public non-sealed interface Command extends Message<Void> {
 }

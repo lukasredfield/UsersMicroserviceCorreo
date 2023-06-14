@@ -21,11 +21,23 @@ public class MessageBusImpl implements MessageBus {
 
   @Override
   @SuppressWarnings("unchecked")
-  public <T extends Message<R>, R> R dispatch(T request) {
+  public <T extends Message<Void>> void dispatch(T request) {
+    var handler = (MessageHandler<T, Void>) handlers.get(request.getClass());
+    if (handler == null) {
+      throw new HandlerNotFoundException(
+          String.format("%s handler was not found!", request.getClass().getSimpleName()));
+    }
+
+    handler.handle(request);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public <T extends Message<R>, R> R request(T request) {
     var handler = (MessageHandler<T, R>) handlers.get(request.getClass());
     if (handler == null) {
       throw new HandlerNotFoundException(
-          String.format("%s handler was not found!", request.getClass().getName()));
+          String.format("%s handler was not found!", request.getClass().getSimpleName()));
     }
 
     return handler.handle(request);

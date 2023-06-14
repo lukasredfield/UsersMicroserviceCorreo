@@ -22,8 +22,8 @@ services:
     hostname: user-service-database
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
       POSTGRES_DB: user-service
     ports:
       - '5432:5432'

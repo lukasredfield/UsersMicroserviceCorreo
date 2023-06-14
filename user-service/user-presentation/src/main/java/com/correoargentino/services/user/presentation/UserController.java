@@ -1,16 +1,6 @@
 package com.correoargentino.services.user.presentation;
 
-import com.auth0.jwk.Jwk;
-import com.auth0.jwk.JwkProvider;
-import com.auth0.jwk.JwkProviderBuilder;
-import com.auth0.jwk.UrlJwkProvider;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.correoargentino.services.user.application.command.DeleteUserCommand;
 import com.correoargentino.services.user.application.port.input.UserService;
-import com.correoargentino.services.user.application.query.GetUserQuery;
-import com.correoargentino.services.user.presentation.mapper.CommandMapper;
 import com.correoargentino.services.user.presentation.request.CreateUserRequest;
 import com.correoargentino.services.user.presentation.request.UpdateUserRequest;
 import com.correoargentino.services.user.presentation.response.CreateUserResponse;
@@ -22,21 +12,20 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-
-import java.security.interfaces.RSAPublicKey;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The mechanism that dispatches Command objects to their appropriate CommandHandler.
@@ -53,7 +42,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
   private final UserService userService;
-  private final CommandMapper commandMapper;
 
   /**
    * Dispatch the given {@code command} to the CommandHandler subscribed to the given
@@ -88,9 +76,10 @@ public class UserController {
   )
   @PostMapping
   public ResponseEntity<CreateUserResponse> createUser(
-          @RequestBody CreateUserRequest request) {
+      @RequestBody CreateUserRequest request) {
     log.info("Creating a new user");
-    var id = userService.createUser(commandMapper.fromRequest(request));
+    var id = userService.createUser(request.firstName(),
+        request.lastName(), request.emailAddress(), request.phoneNumber(), request.password());
     return new ResponseEntity<>(new CreateUserResponse(id), HttpStatus.CREATED);
   }
 
@@ -133,7 +122,7 @@ public class UserController {
   )
   @GetMapping(value = "{id}")
   public ResponseEntity<GetUserResponse> getUser(@PathVariable UUID id) {
-    var user = userService.getUser(new GetUserQuery(id));
+    var user = userService.getUser(id);
     return new ResponseEntity<>(new GetUserResponse(user), HttpStatus.OK);
   }
 
@@ -176,7 +165,8 @@ public class UserController {
   public ResponseEntity<Void> updateUser(
       @PathVariable UUID id,
       @RequestBody UpdateUserRequest request) {
-    userService.updateUser(commandMapper.fromUpdateRequest(id, request));
+    userService.updateUser(id, request.firstName(),
+        request.lastName(), request.emailAddress(), request.phoneNumber());
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
@@ -216,13 +206,7 @@ public class UserController {
   )
   @DeleteMapping(value = "{id}")
   public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
-    userService.deleteUser(new DeleteUserCommand(id));
+    userService.deleteUser(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
-
-//  @PostMapping(value = "/logout")
-//  public ResponseEntity<Void> logoutUser(@RequestHeader("Authorization") String token) {
-//    userService.logoutUser(token);
-//    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//  }
 }

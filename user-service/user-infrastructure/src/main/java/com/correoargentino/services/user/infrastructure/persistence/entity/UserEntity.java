@@ -1,40 +1,41 @@
 package com.correoargentino.services.user.infrastructure.persistence.entity;
 
+import com.correoargentino.services.user.domain.model.Preferences;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class UserEntity {
-
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "user_id")
   private UUID id;
 
-  @Column(name = "user_name")
-  private String userName;
-
-  @Column(name = "first_name")
+  @Column(nullable = false)
   private String firstName;
 
-  @Column(name = "last_name")
+  @Column(nullable = false)
   private String lastName;
 
-  @Column(name = "email_address")
+  @Column(nullable = false)
   private String emailAddress;
 
-  @Column(name = "password")
-  private String password;
+  @Column(nullable = true)
+  private String phoneNumber;
 
-  @Column(name = "created_at")
+  @JdbcTypeCode(SqlTypes.JSON)
+  private Preferences preferences;
+
+  @Column(nullable = false)
   private LocalDateTime createdAt;
 
-  @Column(name = "updated_at")
+  @Column(nullable = false)
   private LocalDateTime updatedAt;
 }

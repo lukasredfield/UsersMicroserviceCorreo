@@ -1,14 +1,31 @@
 package com.correoargentino.services.user.domain.primitive;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.Objects;
 
-@Data
-@NoArgsConstructor
 public abstract class Entity<T> {
-  private T id;
+  protected T id;
 
-  protected Entity(T id) {
+  public void setId(T id) {
     this.id = id;
+  }
+  public T getId() {
+    return id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Entity<?> entity = (Entity<?>) o;
+    return Objects.equals(id, entity.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
