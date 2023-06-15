@@ -28,7 +28,7 @@ public class KeycloakConfiguration {
         .serverUrl(host)
         .clientId(clientId)
         .clientSecret(clientSecret)
-        .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+        .grantType(OAuth2Constants.PASSWORD).username("lucas").password("admin")
         .realm(realm)
         .build();
   }

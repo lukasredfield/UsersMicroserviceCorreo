@@ -16,6 +16,8 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "users")
 public class UserEntity {
   @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+
   private UUID id;
 
   @Column(nullable = false)

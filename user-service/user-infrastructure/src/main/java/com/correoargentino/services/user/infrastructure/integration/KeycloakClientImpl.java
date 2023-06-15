@@ -10,6 +10,9 @@ import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+
+import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,6 +20,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KeycloakClientImpl implements KeycloakClient {
   private final UsersResource usersResource;
+  private final UserKeycloak userKeycloak;
+
 
   public UUID register(String firstName, String lastName,
                        String emailAddress, String password) {
@@ -34,10 +39,20 @@ public class KeycloakClientImpl implements KeycloakClient {
     user.setCredentials(List.of(credential));
     user.setEnabled(true);
 
+
+    //CREAR EXCEPCIÓN PERSONALIZADA
+
     try (var response = usersResource.create(user)) {
       if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
         return UUID.fromString(CreatedResponseUtil.getCreatedId(response));
       }
+
+      if (response.getStatus() == HttpStatus.CREATED.value()) {
+        log.info("Usuario creado en Keycloak: {}", userKeycloak.getFirstName());
+      } else {
+        log.error("Error al crear el usuario en Keycloak: {}", response.getStatusInfo().getReasonPhrase());
+      }
+
     } catch (Exception e) {
       log.error(e.getMessage());
     }
