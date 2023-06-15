@@ -6,6 +6,8 @@ import com.correoargentino.services.user.infrastructure.persistence.entity.UserE
 import com.correoargentino.services.user.infrastructure.persistence.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+
 public class UserMapperImp implements UserMapper {
     @Autowired
     private KeycloakClientImpl keycloakClientImp;
@@ -20,14 +22,10 @@ public class UserMapperImp implements UserMapper {
         return userEntity;
     }
 
-    @Override
-    public User toAggregate(UserEntity userEntity) {
-        return null;
-    }
 
-//    public User toAggregate(UserEntity userEntity) {
-//        return new User(userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmailAddress(), userEntity.getPhoneNumber(), userEntity.getCreatedAt());
-//    }
+    public User toAggregate(UserEntity userEntity) {
+        return new User(userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmailAddress(), userEntity.getPhoneNumber(), userEntity.getPreferences());
+    }
 
 }
 
