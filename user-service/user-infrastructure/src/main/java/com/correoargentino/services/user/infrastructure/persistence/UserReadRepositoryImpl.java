@@ -6,6 +6,8 @@ import com.correoargentino.services.user.domain.model.Preferences;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,7 +28,17 @@ public class UserReadRepositoryImpl implements UserReadRepository {
         String lastName = rs.getString("last_name");
         String emailAddress = rs.getString("email_address");
         String phoneNumber = rs.getString("phone_number");
-        Preferences preferences = rs.getObject("preferences", Preferences.class);
+        String preferencesJson = rs.getString("preferences");
+        Preferences preferences = null;
+
+        // Convertir el JSON a un objeto Preferences utilizando Jackson
+        try {
+          ObjectMapper objectMapper = new ObjectMapper();
+          preferences = objectMapper.readValue(preferencesJson, Preferences.class);
+        } catch (Exception e) {
+          // Manejar cualquier error de deserialización
+          e.printStackTrace();
+        }
         LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
         LocalDateTime updatedAt = rs.getTimestamp("updated_at").toLocalDateTime();
 

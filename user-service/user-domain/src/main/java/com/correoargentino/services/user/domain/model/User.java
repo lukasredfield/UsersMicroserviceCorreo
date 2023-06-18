@@ -40,8 +40,14 @@ public class User extends AggregateRoot<UUID> {
     this.lastName = lastName;
     this.emailAddress = emailAddress;
     this.phoneNumber = phoneNumber;
-    this.updatedAt = LocalDateTime.now();
+
+    if (this.getCreatedAt() == null) {
+      this.setCreatedAt(LocalDateTime.now());
+    }
+
+    this.setUpdatedAt(LocalDateTime.now());
   }
+
 
   @Override
   public boolean equals(Object o) {
