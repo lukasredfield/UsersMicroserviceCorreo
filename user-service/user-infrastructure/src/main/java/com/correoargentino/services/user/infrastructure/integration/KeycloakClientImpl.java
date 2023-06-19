@@ -47,12 +47,6 @@ public class KeycloakClientImpl implements KeycloakClient {
         return UUID.fromString(CreatedResponseUtil.getCreatedId(response));
       }
 
-      if (response.getStatus() == HttpStatus.CREATED.value()) {
-        log.info("Usuario creado en Keycloak: {}", userKeycloak.getFirstName());
-      } else {
-        log.error("Error al crear el usuario en Keycloak: {}", response.getStatusInfo().getReasonPhrase());
-      }
-
     } catch (Exception e) {
       log.error(e.getMessage());
     }

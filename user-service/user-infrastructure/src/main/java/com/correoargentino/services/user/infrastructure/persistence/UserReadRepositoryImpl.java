@@ -31,14 +31,12 @@ public class UserReadRepositoryImpl implements UserReadRepository {
         String preferencesJson = rs.getString("preferences");
         Preferences preferences = null;
 
-        // Convertir el JSON a un objeto Preferences utilizando Jackson
         try {
           if (preferencesJson != null) {
             ObjectMapper objectMapper = new ObjectMapper();
             preferences = objectMapper.readValue(preferencesJson, Preferences.class);
           }
         } catch (Exception e) {
-          // Manejar cualquier error de deserialización
           e.printStackTrace();
         }
         LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
