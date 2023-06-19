@@ -60,8 +60,25 @@ public class KeycloakClientImpl implements KeycloakClient {
     try {
       userResource.remove();
     } catch (WebApplicationException e) {
-      throw new RuntimeException("Error al eliminar el usuario de Keycloak", e);
+      throw new RuntimeException("Error al eliminar el usuario", e);
     }
   }
+
+  @Override
+  public void updateUser(UUID id, String firstName, String lastName, String emailAddress) {
+    UserResource userResource = usersResource.get(id.toString());
+
+    UserRepresentation user = userResource.toRepresentation();
+    user.setFirstName(firstName);
+    user.setLastName(lastName);
+    user.setEmail(emailAddress);
+
+    try {
+      userResource.update(user);
+    } catch (WebApplicationException e) {
+      throw new RuntimeException("Error al actualizar el usuario", e);
+    }
+  }
+
 
 }

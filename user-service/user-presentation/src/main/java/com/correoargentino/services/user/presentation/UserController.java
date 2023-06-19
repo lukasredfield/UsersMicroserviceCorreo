@@ -175,6 +175,8 @@ public class UserController {
           @RequestBody UpdateUserRequest request) {
     userService.updateUser(id, request.firstName(),
         request.lastName(), request.emailAddress(), request.phoneNumber());
+    keycloakClient.updateUser(id, request.firstName(),
+            request.lastName(), request.emailAddress());
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
