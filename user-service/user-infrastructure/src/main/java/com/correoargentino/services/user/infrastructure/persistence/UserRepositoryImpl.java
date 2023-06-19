@@ -27,22 +27,6 @@ public class UserRepositoryImpl implements UserRepository {
     userEntityRepository.save(userMapper.fromAggregate(user));
   }
 
-  public void safe(User user) {
-    UUID id = user.getId();
-    Optional<UserEntity> userEntityOptional = userEntityRepository.findById(id);
-    if (userEntityOptional.isPresent()) {
-      UserEntity existingUserEntity = userEntityOptional.get();
-      userMapper.updateFromAggregate(user, existingUserEntity);
-      userEntityRepository.save(existingUserEntity);
-    } else {
-      throw new RuntimeException("No se pudo actualizar el usuario");
-    }
-  }
-
-
-
-
-
   @Override
   public void delete(UUID id) {
     userEntityRepository.deleteById(id);

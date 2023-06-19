@@ -80,5 +80,4 @@ public class KeycloakClientImpl implements KeycloakClient {
     }
   }
 
-
 }

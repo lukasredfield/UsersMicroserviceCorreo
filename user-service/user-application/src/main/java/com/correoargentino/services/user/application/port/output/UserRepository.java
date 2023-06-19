@@ -10,6 +10,5 @@ import java.util.UUID;
 public interface UserRepository {
   Optional<User> find(UUID id) throws UserNotFoundException;
   void save(User user);
-  void safe(User user);
   void delete(UUID id);
 }
