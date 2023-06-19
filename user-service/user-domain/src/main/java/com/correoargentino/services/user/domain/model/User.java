@@ -16,6 +16,8 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class User extends AggregateRoot<UUID> {
+
+  private UUID id;
   private String firstName;
   private String lastName;
   private String emailAddress;
@@ -47,6 +49,7 @@ public class User extends AggregateRoot<UUID> {
 
     this.setUpdatedAt(LocalDateTime.now());
   }
+
 
 
   @Override

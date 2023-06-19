@@ -33,8 +33,10 @@ public class UserReadRepositoryImpl implements UserReadRepository {
 
         // Convertir el JSON a un objeto Preferences utilizando Jackson
         try {
-          ObjectMapper objectMapper = new ObjectMapper();
-          preferences = objectMapper.readValue(preferencesJson, Preferences.class);
+          if (preferencesJson != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            preferences = objectMapper.readValue(preferencesJson, Preferences.class);
+          }
         } catch (Exception e) {
           // Manejar cualquier error de deserialización
           e.printStackTrace();
@@ -51,6 +53,4 @@ public class UserReadRepositoryImpl implements UserReadRepository {
       return Optional.empty();
     }
   }
-
-
 }

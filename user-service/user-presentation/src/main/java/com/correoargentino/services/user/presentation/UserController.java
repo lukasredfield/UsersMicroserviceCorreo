@@ -163,8 +163,8 @@ public class UserController {
 
   @PutMapping(value = "{id}")
   public ResponseEntity<Void> updateUser(
-      @PathVariable UUID id,
-      @RequestBody UpdateUserRequest request) {
+          @PathVariable UUID id,
+          @RequestBody UpdateUserRequest request) {
     userService.updateUser(id, request.firstName(),
         request.lastName(), request.emailAddress(), request.phoneNumber());
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);

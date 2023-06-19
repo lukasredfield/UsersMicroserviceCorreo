@@ -21,7 +21,7 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
     user.update(command.firstName(),
         command.lastName(), command.emailAddress(), command.phoneNumber());
 
-    userRepository.save(user);
+    userRepository.safe(user);
 
     return null;
   }

@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     messageBus.dispatch(new UpdateUserCommand(id, firstName, lastName, emailAddress, phoneNumber));
   }
 
+
   @Override
   public void deleteUser(UUID id) {
     messageBus.dispatch(new DeleteUserCommand(id));
