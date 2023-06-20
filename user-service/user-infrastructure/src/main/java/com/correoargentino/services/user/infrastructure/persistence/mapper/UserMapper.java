@@ -11,4 +11,6 @@ public interface UserMapper {
 
   @InheritInverseConfiguration(name = "fromAggregate")
   User toAggregate(UserEntity userEntity);
+
+
 }

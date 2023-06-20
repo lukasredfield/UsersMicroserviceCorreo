@@ -5,11 +5,19 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class User extends AggregateRoot<UUID> {
+
+  private UUID id;
   private String firstName;
   private String lastName;
   private String emailAddress;
@@ -34,8 +42,15 @@ public class User extends AggregateRoot<UUID> {
     this.lastName = lastName;
     this.emailAddress = emailAddress;
     this.phoneNumber = phoneNumber;
-    this.updatedAt = LocalDateTime.now();
+
+    if (this.getCreatedAt() == null) {
+      this.setCreatedAt(LocalDateTime.now());
+    }
+
+    this.setUpdatedAt(LocalDateTime.now());
   }
+
+
 
   @Override
   public boolean equals(Object o) {

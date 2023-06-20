@@ -1,6 +1,7 @@
 package com.correoargentino.services.user.presentation;
 
 import com.correoargentino.services.user.application.port.input.UserService;
+import com.correoargentino.services.user.application.port.output.KeycloakClient;
 import com.correoargentino.services.user.presentation.request.CreateUserRequest;
 import com.correoargentino.services.user.presentation.request.UpdateUserRequest;
 import com.correoargentino.services.user.presentation.response.CreateUserResponse;
@@ -39,9 +40,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Users")
-@RequiredArgsConstructor
+/*@RequiredArgsConstructor*/
 public class UserController {
   private final UserService userService;
+
+  private final KeycloakClient keycloakClient;
+
+  public UserController(UserService userService, KeycloakClient keycloakClient) {
+    this.userService = userService;
+    this.keycloakClient = keycloakClient;
+  }
 
   /**
    * Dispatch the given {@code command} to the CommandHandler subscribed to the given
@@ -163,10 +171,12 @@ public class UserController {
 
   @PutMapping(value = "{id}")
   public ResponseEntity<Void> updateUser(
-      @PathVariable UUID id,
-      @RequestBody UpdateUserRequest request) {
+          @PathVariable UUID id,
+          @RequestBody UpdateUserRequest request) {
     userService.updateUser(id, request.firstName(),
         request.lastName(), request.emailAddress(), request.phoneNumber());
+    keycloakClient.updateUser(id, request.firstName(),
+            request.lastName(), request.emailAddress());
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
@@ -207,6 +217,7 @@ public class UserController {
   @DeleteMapping(value = "{id}")
   public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
     userService.deleteUser(id);
+    keycloakClient.deleteUser(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

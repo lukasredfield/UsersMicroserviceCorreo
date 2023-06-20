@@ -3,13 +3,17 @@ package com.correoargentino.services.user.infrastructure.integration;
 import com.correoargentino.services.user.application.port.output.KeycloakClient;
 import java.util.List;
 import java.util.UUID;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.CreatedResponseUtil;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+
+
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -34,14 +38,46 @@ public class KeycloakClientImpl implements KeycloakClient {
     user.setCredentials(List.of(credential));
     user.setEnabled(true);
 
+
+    //CREAR EXCEPCIÓN PERSONALIZADA
+
     try (var response = usersResource.create(user)) {
       if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
         return UUID.fromString(CreatedResponseUtil.getCreatedId(response));
       }
+
     } catch (Exception e) {
       log.error(e.getMessage());
     }
 
     return null;
   }
+
+  @Override
+  public void deleteUser(UUID id) {
+    UserResource userResource = usersResource.get(id.toString());
+
+    try {
+      userResource.remove();
+    } catch (WebApplicationException e) {
+      throw new RuntimeException("Error al eliminar el usuario", e);
+    }
+  }
+
+  @Override
+  public void updateUser(UUID id, String firstName, String lastName, String emailAddress) {
+    UserResource userResource = usersResource.get(id.toString());
+
+    UserRepresentation user = userResource.toRepresentation();
+    user.setFirstName(firstName);
+    user.setLastName(lastName);
+    user.setEmail(emailAddress);
+
+    try {
+      userResource.update(user);
+    } catch (WebApplicationException e) {
+      throw new RuntimeException("Error al actualizar el usuario", e);
+    }
+  }
+
 }

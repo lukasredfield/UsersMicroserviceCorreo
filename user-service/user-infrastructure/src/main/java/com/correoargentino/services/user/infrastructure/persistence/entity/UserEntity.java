@@ -38,4 +38,9 @@ public class UserEntity {
 
   @Column(nullable = false)
   private LocalDateTime updatedAt;
+
+
+
 }
+
+

@@ -2,12 +2,15 @@ package com.correoargentino.services.user.infrastructure.persistence;
 
 import com.correoargentino.services.user.application.port.output.UserRepository;
 import com.correoargentino.services.user.domain.model.User;
+import com.correoargentino.services.user.infrastructure.persistence.entity.UserEntity;
 import com.correoargentino.services.user.infrastructure.persistence.mapper.UserMapper;
 import com.correoargentino.services.user.infrastructure.persistence.repository.UserEntityRepository;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+
 
 @Service
 @RequiredArgsConstructor
