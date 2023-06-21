@@ -12,7 +12,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -22,10 +21,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public UUID createUser(String firstName, String lastName,
                          String emailAddress, String phoneNumber, String password) {
-    var id = keycloakClient.register(firstName, lastName, emailAddress, password);
 
-    messageBus.dispatch(new CreateUserCommand(
-        id, firstName, lastName, emailAddress, phoneNumber, password));
+    var id =
+        UUID.randomUUID(); // keycloakClient.register(firstName, lastName, emailAddress, password);
+
+    messageBus.dispatch(new CreateUserCommand(id, firstName, lastName, emailAddress, phoneNumber));
 
     return id;
   }

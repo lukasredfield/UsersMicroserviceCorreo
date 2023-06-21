@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,7 +85,7 @@ public class UserController {
   )
   @PostMapping
   public ResponseEntity<CreateUserResponse> createUser(
-      @RequestBody CreateUserRequest request) {
+     @Valid @RequestBody CreateUserRequest request) {
     log.info("Creating a new user");
     var id = userService.createUser(request.firstName(),
         request.lastName(), request.emailAddress(), request.phoneNumber(), request.password());

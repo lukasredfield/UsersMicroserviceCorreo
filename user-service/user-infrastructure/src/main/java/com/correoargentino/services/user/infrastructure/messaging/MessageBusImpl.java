@@ -1,8 +1,12 @@
-package com.correoargentino.services.user.application.messaging;
+package com.correoargentino.services.user.infrastructure.messaging;
 
+import com.correoargentino.services.user.application.messaging.Message;
+import com.correoargentino.services.user.application.messaging.MessageBus;
+import com.correoargentino.services.user.application.messaging.MessageHandler;
 import com.correoargentino.services.user.application.messaging.exception.HandlerNotFoundException;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.validation.Valid;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Slf4j
 @Service
+@Validated
 @RequiredArgsConstructor
 public class MessageBusImpl implements MessageBus {
   private final ApplicationContext applicationContext;

@@ -15,7 +15,7 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
 
   @Override
   public Void handle(UpdateUserCommand command) {
-    User user = userRepository.find(command.id())
+    User user = userRepository.findById(command.id())
         .orElseThrow(() -> new UserNotFoundException(command.id()));
 
     user.update(command.firstName(),
