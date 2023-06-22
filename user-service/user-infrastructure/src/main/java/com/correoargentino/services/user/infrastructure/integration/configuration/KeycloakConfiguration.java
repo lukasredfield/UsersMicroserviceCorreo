@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class KeycloakConfiguration {
-  @Value("${keycloak.host}")
+  @Value("http://localhost:9090")
   private String host;
 
-  @Value("${keycloak.client-id}")
+  @Value("user-service")
   private String clientId;
 
-  @Value("${keycloak.client-secret}")
+  @Value("OEhHg3NvFDeFORAGFTMtErwDUTvyO6u1")
   private String clientSecret;
 
-  @Value("${keycloak.realm}")
+  @Value("customers")
   private String realm;
 
   @Bean
@@ -28,7 +28,7 @@ public class KeycloakConfiguration {
         .serverUrl(host)
         .clientId(clientId)
         .clientSecret(clientSecret)
-        .grantType(OAuth2Constants.PASSWORD).username("lucas").password("admin")
+        .grantType(OAuth2Constants.PASSWORD).username("nicolas").password("admin")
         .realm(realm)
         .build();
   }
