@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -84,10 +85,10 @@ public class UserController {
   )
   @PostMapping
   public ResponseEntity<CreateUserResponse> createUser(
-     @Valid @RequestBody CreateUserRequest request) {
+          @Valid @RequestBody CreateUserRequest request) {
     log.info("Creating a new user");
     var id = userService.createUser(request.firstName(),
-        request.lastName(), request.emailAddress(), request.phoneNumber(), request.password());
+            request.lastName(), request.emailAddress(), request.phoneNumber(), request.password());
     keycloakClient.register(request.firstName(),request.lastName(),request.emailAddress(),request.password());
     return new ResponseEntity<>(new CreateUserResponse(id), HttpStatus.CREATED);
   }

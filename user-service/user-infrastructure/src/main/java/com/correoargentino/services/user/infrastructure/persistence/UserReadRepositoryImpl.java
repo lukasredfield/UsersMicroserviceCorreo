@@ -5,12 +5,11 @@ import com.correoargentino.services.user.application.query.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +20,8 @@ public class UserReadRepositoryImpl implements UserReadRepository {
     @Override
     public Optional<User> findById(UUID id) {
         var sql = """
-                SELECT * FROM users s WHERE s.id = ? AND s.deleted_at IS NULL
-                """;
+            SELECT * FROM users s WHERE s.id = ? AND s.deleted_at IS NULL
+            """;
 
         return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new User(
@@ -34,11 +33,16 @@ public class UserReadRepositoryImpl implements UserReadRepository {
                         rs.getString("phone_number"),
                         convertToJsonNode(rs.getString("preferences")),
                         rs.getTimestamp("created_at").toLocalDateTime(),
-                        rs.getTimestamp("updated_at").toLocalDateTime()),
-                        id).stream().findFirst();
+                        rs.getTimestamp("updated_at").toLocalDateTime()
+                ), id).stream().findFirst();
     }
 
+
     private JsonNode convertToJsonNode(String json) {
+        if (json == null) {
+            return null;
+        }
+
         try {
             return objectMapper.readTree(json);
         } catch (JsonProcessingException e) {

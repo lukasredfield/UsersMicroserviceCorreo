@@ -11,18 +11,28 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UpdateUserCommandHandler implements CommandHandler<UpdateUserCommand> {
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  @Override
-  public Void handle(UpdateUserCommand command) {
-    User user = userRepository.findById(command.id())
-        .orElseThrow(() -> new UserNotFoundException(command.id()));
+    /**
+     * Este método maneja el comando de actualización de un usuario.
+     *
+     * @param command El comando UpdateUserCommand que contiene la información necesaria para actualizar el usuario.
+     * @return null, ya que no se devuelve ningún valor específico.
+     * @throws UserNotFoundException si no se encuentra el usuario con el ID especificado.
+     */
+    @Override
+    public Void handle(UpdateUserCommand command) throws UserNotFoundException {
+// Buscar el usuario en el repositorio de usuarios por su ID
+        User user = userRepository.findById(command.id())
+                .orElseThrow(() -> new UserNotFoundException(command.id()));
 
-    user.update(command.firstName(),
-        command.lastName(), command.emailAddress(), command.phoneNumber());
+// Actualizar los atributos del usuario utilizando la información del comando
+        user.update(command.firstName(),
+                command.lastName(), command.emailAddress(), command.phoneNumber());
 
-    userRepository.save(user);
+// Guardar el usuario actualizado en el repositorio
+        userRepository.save(user);
 
-    return null;
-  }
+        return null;
+    }
 }

@@ -48,4 +48,10 @@ public class UserRepositoryImpl implements UserRepository {
       outboxRepository.save(outbox);
     }));
   }
+
+  @Override
+  public void delete(User user) {
+    userEntityRepository.delete(userMapper.fromAggregate(user));
+
+  }
 }

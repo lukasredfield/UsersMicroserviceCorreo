@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class KeycloakClientImpl implements KeycloakClient {
   private final UsersResource usersResource;
 
+  private UUID createdUserId;
   public UUID register(String firstName, String lastName,
                        String emailAddress, String password) {
 
@@ -43,7 +44,8 @@ public class KeycloakClientImpl implements KeycloakClient {
 
     try (var response = usersResource.create(user)) {
       if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
-        return UUID.fromString(CreatedResponseUtil.getCreatedId(response));
+        createdUserId = UUID.fromString(CreatedResponseUtil.getCreatedId(response));
+        return createdUserId;
       }
 
     } catch (Exception e) {
@@ -51,6 +53,10 @@ public class KeycloakClientImpl implements KeycloakClient {
     }
 
     return null;
+  }
+
+  public UUID getCreatedUserId() {
+    return createdUserId;
   }
 
   @Override

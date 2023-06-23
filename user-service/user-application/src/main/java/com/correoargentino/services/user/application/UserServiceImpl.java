@@ -22,8 +22,8 @@ public class UserServiceImpl implements UserService {
   public UUID createUser(String firstName, String lastName,
                          String emailAddress, String phoneNumber, String password) {
 
-    var id =
-        UUID.randomUUID(); // keycloakClient.register(firstName, lastName, emailAddress, password);
+    keycloakClient.register(firstName, lastName, emailAddress, password);
+    UUID id = keycloakClient.getCreatedUserId();
 
     messageBus.dispatch(new CreateUserCommand(id, firstName, lastName, emailAddress, phoneNumber));
 
