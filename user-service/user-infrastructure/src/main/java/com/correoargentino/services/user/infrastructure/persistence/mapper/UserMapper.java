@@ -2,7 +2,6 @@ package com.correoargentino.services.user.infrastructure.persistence.mapper;
 
 import com.correoargentino.services.user.domain.model.User;
 import com.correoargentino.services.user.infrastructure.persistence.entity.UserEntity;
-import java.lang.annotation.Target;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

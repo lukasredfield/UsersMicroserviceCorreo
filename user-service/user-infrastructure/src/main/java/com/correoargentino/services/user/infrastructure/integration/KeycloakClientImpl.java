@@ -1,19 +1,19 @@
 package com.correoargentino.services.user.infrastructure.integration;
 
+import com.correoargentino.services.user.application.exception.UserAlreadyExistException;
 import com.correoargentino.services.user.application.port.output.KeycloakClient;
 import java.util.List;
 import java.util.UUID;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.CreatedResponseUtil;
-import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-
-
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -22,8 +22,9 @@ import org.springframework.stereotype.Service;
 public class KeycloakClientImpl implements KeycloakClient {
   private final UsersResource usersResource;
 
-  public UUID register(String firstName, String lastName,
-                       String emailAddress, String password) {
+  @Override
+  public UUID createUser(String firstName, String lastName,
+                         String emailAddress, String password) {
 
     var credential = new CredentialRepresentation();
     credential.setTemporary(false);
@@ -38,14 +39,16 @@ public class KeycloakClientImpl implements KeycloakClient {
     user.setCredentials(List.of(credential));
     user.setEnabled(true);
 
-
-    //CREAR EXCEPCIÓN PERSONALIZADA
-
     try (var response = usersResource.create(user)) {
       if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
         return UUID.fromString(CreatedResponseUtil.getCreatedId(response));
       }
 
+      if (response.getStatus() == HttpStatus.CONFLICT.value()) {
+        throw new UserAlreadyExistException(user.getUsername());
+      }
+    } catch (NotAuthorizedException e) {
+      log.error(e.getMessage());
     } catch (Exception e) {
       log.error(e.getMessage());
     }
@@ -55,7 +58,7 @@ public class KeycloakClientImpl implements KeycloakClient {
 
   @Override
   public void deleteUser(UUID id) {
-    UserResource userResource = usersResource.get(id.toString());
+    var userResource = usersResource.get(id.toString());
 
     try {
       userResource.remove();
@@ -66,9 +69,9 @@ public class KeycloakClientImpl implements KeycloakClient {
 
   @Override
   public void updateUser(UUID id, String firstName, String lastName, String emailAddress) {
-    UserResource userResource = usersResource.get(id.toString());
+    var userResource = usersResource.get(id.toString());
 
-    UserRepresentation user = userResource.toRepresentation();
+    var user = userResource.toRepresentation();
     user.setFirstName(firstName);
     user.setLastName(lastName);
     user.setEmail(emailAddress);
@@ -80,4 +83,45 @@ public class KeycloakClientImpl implements KeycloakClient {
     }
   }
 
+  @Override
+  public void verifyUser(UUID id) {
+    var userResource = usersResource.get(id.toString());
+
+    try {
+      userResource.sendVerifyEmail();
+    } catch (WebApplicationException e) {
+      throw new RuntimeException("Error al actualizar el usuario", e);
+    }
+  }
+
+  @Override
+  public UUID activateUser(String token) {
+    var userResource = usersResource.get(token);
+
+    UserRepresentation user = userResource.toRepresentation();
+    user.setEmailVerified(true);
+
+    try {
+      userResource.update(user);
+      return UUID.fromString(user.getId());
+    } catch (WebApplicationException e) {
+      throw new RuntimeException("Error al actualizar el usuario", e);
+    }
+  }
+
+  @Override
+  public void changeUserPassword(UUID id, String password) {
+    var userResource = usersResource.get(id.toString());
+
+    var credential = new CredentialRepresentation();
+    credential.setTemporary(false);
+    credential.setType(CredentialRepresentation.PASSWORD);
+    credential.setValue(password);
+
+    try {
+      userResource.resetPassword(credential);
+    } catch (WebApplicationException e) {
+      throw new RuntimeException("Error al actualizar el usuario", e);
+    }
+  }
 }

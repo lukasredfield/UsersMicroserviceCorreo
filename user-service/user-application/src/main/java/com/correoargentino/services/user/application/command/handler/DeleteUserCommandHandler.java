@@ -14,14 +14,12 @@ public class DeleteUserCommandHandler implements CommandHandler<DeleteUserComman
   private final UserRepository userRepository;
 
   @Override
-  public Void handle(DeleteUserCommand command) {
+  public void handle(DeleteUserCommand command) {
     User user = userRepository.findById(command.id())
         .orElseThrow(() -> new UserNotFoundException(command.id()));
 
     user.delete();
 
     userRepository.save(user);
-
-    return null;
   }
 }

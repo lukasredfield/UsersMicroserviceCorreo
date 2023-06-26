@@ -1,8 +1,10 @@
 package com.correoargentino.services.user.presentation.exception;
 
 import com.correoargentino.services.user.application.exception.AccessTokenExpiredException;
+import com.correoargentino.services.user.application.exception.EmailAddressNotFoundException;
 import com.correoargentino.services.user.application.exception.UserAlreadyExistException;
 import com.correoargentino.services.user.application.exception.UserNotFoundException;
+import com.correoargentino.services.user.application.exception.UsernameNotFoundException;
 import com.correoargentino.services.user.presentation.response.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import java.net.URI;
@@ -22,8 +24,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
-  @ExceptionHandler(UserNotFoundException.class)
-  public ResponseEntity<ErrorResponse> handleException(UserNotFoundException exception) {
+  @ExceptionHandler({UserNotFoundException.class,
+      UsernameNotFoundException.class, EmailAddressNotFoundException.class})
+  public ResponseEntity<ErrorResponse> handleException(Exception exception) {
     log.error(exception.getMessage(), exception);
 
     return new ResponseEntity<>(
