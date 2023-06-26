@@ -22,7 +22,6 @@ public class User extends AggregateRoot<UUID> {
   private String phoneNumber;
   private Parameters parameters;
   private UserStatus status;
-  private LocalDateTime deletedAt;
 
   public void create(UUID id, String firstName,
                      String lastName, String emailAddress, String phoneNumber) {
