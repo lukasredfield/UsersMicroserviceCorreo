@@ -7,6 +7,13 @@ import com.correoargentino.services.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Clase que maneja el comando de creación de usuario.
+ *
+ * Esta clase implementa la interfaz CommandHandler<CreateUserCommand> para indicar que es responsable de manejar el comando de creación de usuario.
+ * Utiliza la anotación @Component de Spring para indicar que es un componente que se puede inyectar en otras clases.
+ * También utiliza la anotación @RequiredArgsConstructor de Lombok para generar un constructor con argumentos para los campos marcados con 'final'.
+ */
 @Component
 @RequiredArgsConstructor
 public class CreateUserCommandHandler implements CommandHandler<CreateUserCommand> {
@@ -20,13 +27,8 @@ public class CreateUserCommandHandler implements CommandHandler<CreateUserComman
      */
     @Override
     public Void handle(CreateUserCommand command) {
-// Crear una nueva instancia de User
         var user = new User();
-
-// Establecer los atributos del usuario utilizando la información del comando
         user.create(command.id(), command.firstName(), command.lastName(), command.emailAddress(), command.phoneNumber());
-
-// Guardar el usuario en el repositorio
         userRepository.save(user);
 
         return null;

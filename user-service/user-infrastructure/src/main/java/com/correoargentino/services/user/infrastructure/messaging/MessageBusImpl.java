@@ -16,6 +16,12 @@ import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+/**
+ * Implementación de la interfaz MessageBus que gestiona la comunicación y el enrutamiento de mensajes.
+ * Esta clase utiliza las anotaciones @Service y @Validated de Spring para indicar que es un componente de servicio y que se deben aplicar validaciones en los métodos.
+ * También utiliza la anotación @RequiredArgsConstructor de Lombok para generar un constructor con argumentos para los campos marcados con 'final'.
+ *
+ */
 @Slf4j
 @Service
 @Validated

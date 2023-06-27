@@ -8,6 +8,13 @@ import com.correoargentino.services.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * Clase que maneja el comando de actualización de usuario.
+ * <p>
+ * Esta clase implementa la interfaz CommandHandler<UpdateUserCommand> para indicar que es responsable de manejar el comando de actualización de usuario.
+ * Utiliza la anotación @Service de Spring para indicar que es un servicio.
+ * También utiliza la anotación @RequiredArgsConstructor de Lombok para generar un constructor con argumentos para los campos marcados con 'final'.
+ */
 @Service
 @RequiredArgsConstructor
 public class UpdateUserCommandHandler implements CommandHandler<UpdateUserCommand> {
@@ -22,17 +29,12 @@ public class UpdateUserCommandHandler implements CommandHandler<UpdateUserComman
      */
     @Override
     public Void handle(UpdateUserCommand command) throws UserNotFoundException {
-// Buscar el usuario en el repositorio de usuarios por su ID
         User user = userRepository.findById(command.id())
                 .orElseThrow(() -> new UserNotFoundException(command.id()));
-
-// Actualizar los atributos del usuario utilizando la información del comando
         user.update(command.firstName(),
                 command.lastName(), command.emailAddress(), command.phoneNumber());
 
-// Guardar el usuario actualizado en el repositorio
         userRepository.save(user);
-
         return null;
     }
 }
