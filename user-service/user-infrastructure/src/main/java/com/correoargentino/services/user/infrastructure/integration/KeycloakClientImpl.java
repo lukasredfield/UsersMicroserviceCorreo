@@ -4,7 +4,7 @@ import com.correoargentino.services.user.application.exception.UserAlreadyExistE
 import com.correoargentino.services.user.application.port.output.KeycloakClient;
 import java.util.List;
 import java.util.UUID;
-import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
@@ -40,20 +40,19 @@ public class KeycloakClientImpl implements KeycloakClient {
     user.setEnabled(true);
 
     try (var response = usersResource.create(user)) {
-      if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
-        return UUID.fromString(CreatedResponseUtil.getCreatedId(response));
+      log.info("Register keycloak client status: {}", response.getStatus());
+
+      if (response.getStatusInfo().getFamily() != Response.Status.Family.SUCCESSFUL) {
+
+        if (response.getStatus() == HttpStatus.CONFLICT.value()) {
+          throw new UserAlreadyExistException(user.getUsername());
+        }
+
+        throw new BadRequestException();
       }
 
-      if (response.getStatus() == HttpStatus.CONFLICT.value()) {
-        throw new UserAlreadyExistException(user.getUsername());
-      }
-    } catch (NotAuthorizedException e) {
-      log.error(e.getMessage());
-    } catch (Exception e) {
-      log.error(e.getMessage());
+      return UUID.fromString(CreatedResponseUtil.getCreatedId(response));
     }
-
-    return null;
   }
 
   @Override
