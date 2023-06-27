@@ -1,8 +1,11 @@
 package com.correoargentino.services.user.infrastructure.persistence.entity;
 
-import com.correoargentino.services.user.domain.model.Preferences;
+import com.correoargentino.services.user.domain.model.Parameters;
+import com.correoargentino.services.user.domain.model.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
@@ -10,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -38,8 +42,14 @@ public class UserEntity {
   @Column(nullable = true)
   private String phoneNumber;
 
+  @Column(nullable = false)
+  @ColumnDefault("'{}'::jsonb")
   @JdbcTypeCode(SqlTypes.JSON)
-  private Preferences preferences;
+  private Parameters parameters;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 20)
+  private UserStatus status;
 
   @Column(nullable = false)
   private LocalDateTime createdAt;

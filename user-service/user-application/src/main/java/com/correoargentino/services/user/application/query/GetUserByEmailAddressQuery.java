@@ -2,8 +2,7 @@ package com.correoargentino.services.user.application.query;
 
 import com.correoargentino.services.user.application.messaging.Query;
 import com.correoargentino.services.user.application.query.model.User;
-import jakarta.validation.constraints.NotNull;
-import java.util.UUID;
+import jakarta.validation.constraints.Email;
 
-public record GetUserQuery(@NotNull UUID id) implements Query<User> {
+public record GetUserByEmailAddressQuery(@Email String emailAddress) implements Query<User> {
 }

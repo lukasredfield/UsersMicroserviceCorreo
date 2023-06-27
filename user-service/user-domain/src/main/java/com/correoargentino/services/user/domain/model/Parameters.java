@@ -4,6 +4,6 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class Preferences implements Serializable {
-  private String setting;
+public class Parameters implements Serializable {
+  private String parameter;
 }
